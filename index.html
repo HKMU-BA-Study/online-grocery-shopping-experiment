@@ -301,7 +301,6 @@
             const rawParticipantID = formData.get('participant_id').trim();
             const participantNum = parseInt(rawParticipantID, 10);
 
-            // 1. 驗證 Participant ID 是否為有效數字
             if (isNaN(participantNum)) {
                 alert('請輸入有效的數字受試者編號！');
                 return;
@@ -309,13 +308,12 @@
 
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'AI 正在分析偏好並挑選推薦商品...';
+            submitBtn.textContent = (participantNum % 2 !== 0)
+                ? 'AI 正在分析偏好並挑選推薦商品...'
+                : '正在載入到線上超市';
 
             localStorage.setItem("participantID", participantNum);
 
-            // 2. 判斷 Participant ID 是奇數還是偶數，決定目標跳轉頁面
-            // 奇數 (Odd) -> grocery_ai_page.html
-            // 偶數 (Even) -> grocery_traditional_page.html
             const targetPage = (participantNum % 2 !== 0)
                 ? 'grocery_ai_page.html'
                 : 'grocery_traditional_page.html';
