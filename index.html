@@ -221,6 +221,11 @@
 
         <form id="surveyForm" onsubmit="handleSubmit(event)">
 
+            <div class="form-group">
+                <label class="question-title" for="participant_id">1. 請輸入您的受試者編號 (Participant ID) <span class="required">*</span></label>
+                <input type="text" id="participant_id" name="participant_id" class="input-text" placeholder="例如：P001" required>
+            </div>
+
             <!-- 問題 1：價格重視程度 -->
             <div class="form-group">
                 <label class="question-title">1. 在選購食品時，您對「價格」的重視程度為何？ <span class="required">*</span></label>
@@ -311,7 +316,11 @@
 
             const formData = new FormData(event.target);
 
-            // 整理使用者偏好
+            // 1. 讀取並儲存 Participant ID
+            const participantID = formData.get('participant_id').trim();
+            localStorage.setItem("participantID", participantID);
+
+            // 2. 整理使用者偏好
             const userPreferences = {
                 price_sensitivity: formData.get('price_importance'),
                 sustainability_importance: formData.get('eco_importance'),

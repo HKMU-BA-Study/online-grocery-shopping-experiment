@@ -32,11 +32,11 @@ let currentPID = "";
 document.addEventListener('DOMContentLoaded', function () {
     function getPID() {
         let pid = localStorage.getItem("participantID");
-        while (!pid || pid.trim() === "") {
-            pid = prompt("Please enter your Participant ID (same as questionnaire)");
-            if (pid === null) location.reload();
+        // 如果沒有找到 ID（例如用戶直接輸入網址進入），可給予預設值或引導回問卷
+        if (!pid || pid.trim() === "") {
+            pid = "Anonymous";
+            localStorage.setItem("participantID", pid);
         }
-        localStorage.setItem("participantID", pid.trim());
         return pid.trim();
     }
     currentPID = getPID();
