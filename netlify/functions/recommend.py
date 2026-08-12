@@ -32,7 +32,7 @@ Output MUST be a valid JSON array:
             {"role": "system", "content": "Output strictly valid JSON arrays without markdown."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=300,
+        max_tokens=200,
         temperature=0.2
     )
 
@@ -45,13 +45,23 @@ Output MUST be a valid JSON array:
 
     return json.loads(content)
 
-# Netlify Function 的入口函式 handler
 def handler(event, context):
+    headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+    }
+
+    # 處理 CORS Preflight 請求
+    if event.get("httpMethod") == "OPTIONS":
+        return {"statusCode": 200, "headers": headers, "body": ""}
+
     # 處理 GET 測試
     if event.get("httpMethod") == "GET":
         return {
             "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
+            "headers": headers,
             "body": json.dumps({"status": "ok", "message": "Netlify AI Function Active"})
         }
 
@@ -65,6 +75,7 @@ def handler(event, context):
             if not products or len(products) < 3:
                 return {
                     "statusCode": 400,
+                    "headers": headers,
                     "body": json.dumps({"detail": "Products list must contain at least 3 items."})
                 }
 
@@ -72,14 +83,19 @@ def handler(event, context):
 
             return {
                 "statusCode": 200,
-                "headers": {"Content-Type": "application/json"},
+                "headers": headers,
                 "body": json.dumps(result)
             }
 
         except Exception as e:
             return {
                 "statusCode": 500,
+                "headers": headers,
                 "body": json.dumps({"detail": str(e)})
             }
 
-    return {"statusCode": 405, "body": "Method Not Allowed"}
+    return {
+        "statusCode": 405,
+        "headers": headers,
+        "body": json.dumps({"detail": "Method Not Allowed"})
+    }

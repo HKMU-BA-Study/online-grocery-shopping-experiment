@@ -272,8 +272,7 @@
     </div>
 
     <script>
-        // 💡 去掉結尾的斜線，避免 Vercel 做 URL 正規化轉址
-        const VERCEL_API_URL = "/.netlify/functions/recommend";
+        const NETLIFY_API_URL = "/.netlify/functions/recommend";
 
         // 2. 你提供的完整商品清單 (包含 24 項商品)
         const productsList = [
@@ -325,7 +324,7 @@
             };
 
             try {
-                const response = await fetch(VERCEL_API_URL, {
+                const response = await fetch(NETLIFY_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
