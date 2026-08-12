@@ -1,8 +1,2 @@
 [build]
   functions = "netlify/functions"
-
-[functions]
-  directory = "netlify/functions"
-
-[functions."recommend"]
-  runtime = "python"
