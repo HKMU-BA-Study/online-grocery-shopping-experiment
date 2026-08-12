@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
 from datetime import datetime
+
 
 # ====================== 主程序 ======================
 class GroceryApp:
@@ -135,6 +136,7 @@ class GroceryApp:
         log = f"[{now}] {action}\n"
         with open("experiment_log.txt", "a", encoding="utf-8") as f:
             f.write(log)
+
 
 # 运行
 if __name__ == "__main__":

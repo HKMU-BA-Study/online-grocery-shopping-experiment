@@ -223,7 +223,8 @@
 
             <div class="form-group">
                 <label class="question-title" for="participant_id">1. 請輸入您的受試者編號 (Participant ID) <span class="required">*</span></label>
-                <input type="text" id="participant_id" name="participant_id" class="input-text" placeholder="例如：P001" required>
+                <!-- 修改 type="number" 確保輸入必須為純數字 -->
+                <input type="number" id="participant_id" name="participant_id" class="input-text" placeholder="請輸入純數字 (例如：101)" required min="1">
             </div>
 
             <!-- 問題 1：價格重視程度 -->
@@ -279,7 +280,6 @@
     <script>
         const NETLIFY_API_URL = "/.netlify/functions/recommend";
 
-        // 2. 你提供的完整商品清單 (包含 24 項商品)
         const productsList = [
             { id: 1, name: "Red Fuji Apple", price: 5.99, isEco: true },
             { id: 2, name: "Whole Milk", price: 12.50, isEco: true },
@@ -287,40 +287,39 @@
             { id: 4, name: "Farm Fresh Eggs", price: 15.00, isEco: true },
             { id: 5, name: "Natural Mineral Water", price: 2.50, isEco: true },
             { id: 6, name: "Fresh Beef", price: 18.99, isEco: true },
-            { id: 7, name: "Moisturizing Body Wash", price: 7.99, isEco: false },
             { id: 8, name: "Raw Chicken Legs", price: 9.99, isEco: true },
-            { id: 9, name: "Dark Chocolate", price: 4.99, isEco: false },
             { id: 10, name: "Fresh Cucumber", price: 1.99, isEco: true },
-            { id: 11, name: "Vanilla Ice Cream", price: 3.99, isEco: false },
-            { id: 12, name: "Ballpoint Pen", price: 2.49, isEco: false },
             { id: 13, name: "Long Grain Rice", price: 6.99, isEco: true },
-            { id: 14, name: "Nourishing Shampoo", price: 8.49, isEco: false },
             { id: 15, name: "Fresh Avocado", price: 3.49, isEco: true },
             { id: 16, name: "Fresh Salmon Fillet", price: 22.99, isEco: true },
-            { id: 17, name: "Green Apple Pack", price: 6.49, isEco: true },
-            { id: 18, name: "Organic Banana Bunch", price: 2.99, isEco: true },
-            { id: 19, name: "Roma Tomato Box", price: 4.29, isEco: true },
-            { id: 20, name: "Fresh Lemon Bag", price: 3.50, isEco: true },
-            { id: 21, name: "Frozen Shrimp Pack", price: 14.99, isEco: true },
-            { id: 22, name: "Premium Pork Chops", price: 12.49, isEco: true },
-            { id: 23, name: "Ground Turkey", price: 10.99, isEco: true },
-            { id: 24, name: "Cod Fish Fillets", price: 19.99, isEco: true }
         ];
 
         async function handleSubmit(event) {
             event.preventDefault();
 
+            const formData = new FormData(event.target);
+            const rawParticipantID = formData.get('participant_id').trim();
+            const participantNum = parseInt(rawParticipantID, 10);
+
+            // 1. 驗證 Participant ID 是否為有效數字
+            if (isNaN(participantNum)) {
+                alert('請輸入有效的數字受試者編號！');
+                return;
+            }
+
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'AI 正在分析偏好並挑選推薦商品...';
 
-            const formData = new FormData(event.target);
+            localStorage.setItem("participantID", participantNum);
 
-            // 1. 讀取並儲存 Participant ID
-            const participantID = formData.get('participant_id').trim();
-            localStorage.setItem("participantID", participantID);
+            // 2. 判斷 Participant ID 是奇數還是偶數，決定目標跳轉頁面
+            // 奇數 (Odd) -> grocery_ai_page.html
+            // 偶數 (Even) -> grocery_traditional_page.html
+            const targetPage = (participantNum % 2 !== 0)
+                ? 'grocery_ai_page.html'
+                : 'grocery_traditional_page.html';
 
-            // 2. 整理使用者偏好
             const userPreferences = {
                 price_sensitivity: formData.get('price_importance'),
                 sustainability_importance: formData.get('eco_importance'),
@@ -348,17 +347,18 @@
                 const recommendations = await response.json();
                 console.log('AI Nudge 結果:', recommendations);
 
-                // 將 AI 推薦結果存至瀏覽器本地記憶體
                 localStorage.setItem('ai_recommendations', JSON.stringify(recommendations));
                 localStorage.setItem('user_preferences', JSON.stringify(userPreferences));
 
-                // 跳轉至購物頁面
-                window.location.href = 'grocery_traditional_page.html';
+                // 跳轉至對應頁面
+                window.location.href = targetPage;
 
             } catch (error) {
                 console.error('API 請求失敗:', error);
-                alert('AI 推薦服務連線超時，將跳轉至一般商城頁面。');
-                window.location.href = 'grocery_traditional_page.html';
+                alert('AI 推薦服務連線超時，將跳轉至商城頁面。');
+
+                // 發生錯誤時依然依據單偶數跳轉
+                window.location.href = targetPage;
             }
         }
     </script>
