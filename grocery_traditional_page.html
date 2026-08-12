@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart | Amazon Style</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Nudge环保徽章样式 */
+        .eco-badge {
+            position: absolute;
+            top:6px;
+            left:6px;
+            background:#81c784;
+            color:#004d00;
+            font-size:11px;
+            padding:2px 6px;
+            border-radius:12px;
+            font-weight:bold;
+            z-index: 2;
+        }
+        .product-card {
+            position:relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .eco-tip-text {
+            color:#2e7d32;
+            font-size:14px;
+            margin:-10px 0 16px 0;
+        }
+        .cart-eco-nudge {
+            margin-top:16px;
+            padding:10px;
+            background:#e8f5e9;
+            border-radius:6px;
+            color:#1b5e20;
+            font-size:14px;
+        }
+        .eco-add-btn {
+            background:#c8e6c9;
+        }
+
+        /* 🤖 新增：AI Nudge 推薦高亮與標籤樣式 */
+        .ai-recommended-card {
+            border: 2px solid #4f46e5 !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        }
+        .ai-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        .ai-nudge-box {
+            background: #fefce8;
+            border-left: 3px solid #eab308;
+            padding: 6px 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #854d0e;
+            line-height: 1.4;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 顶部导航 Amazon 风格 -->
+<header class="top-nav">
+    <div class="container top-wrap">
+        <div class="brand-logo">
+            <h1>FreshMart</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search FreshMart">
+            <button class="search-btn">🔍</button>
+        </div>
+        <div class="header-right">
+            <span>Hello, Customer</span>
+            <a href="#cart" class="cart-top">Cart (<span id="cart-count">0</span>)</a>
+            <a href="admin.html" class="admin-link">Admin</a>
+        </div>
+    </div>
+</header>
+
+<!-- 二级导航 -->
+<section class="sub-nav">
+    <div class="container sub-wrap">
+        <a href="#all-produce" class="wf-logo link-normal">Whole Foods Market</a>
+        <nav class="sub-menu">
+            <a href="#" class="link-normal">Past Purchases</a>
+            <div class="dropdown-wrap">
+                <a href="#" class="dropdown-parent link-normal">Category ▾</a>
+                <div class="dropdown-panel cate-drop">
+                    <div class="drop-item cate-filter" data-type="all">All Items</div>
+                    <div class="drop-item cate-filter" data-type="produce">Fresh Produce</div>
+                    <div class="drop-item cate-filter" data-type="dairy">Dairy & Seafood</div>
+                    <div class="drop-item cate-filter" data-type="pantry">Pantry Staples</div>
+                    <div class="drop-item cate-filter" data-type="snack">Daily & Snack</div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</section>
+
+<!-- Tab切换区域 -->
+<section class="tab-section">
+    <div class="container">
+        <div class="tab-box">
+            <button class="tab-btn active">Past Purchases</button>
+            <button class="tab-btn">Saved Items</button>
+        </div>
+        <p class="tab-tip">Quickly reorder your favorite items.</p>
+    </div>
+</section>
+
+<!-- 精选商品区 Featured Grocery -->
+<section id="products" class="products-section">
+    <div class="container">
+        <div class="cate-head">
+            <h2>Featured Grocery</h2>
+            <a href="#" class="cate-more">See All ></a>
+        </div>
+        <p class="eco-tip-text">💡 Eco Tip: Items marked <span style="background:#81c784;padding:2px 4px;border-radius:4px">Eco Choice</span> use local supply chains to cut carbon emissions</p>
+        <div class="products-grid" id="productWrap">
+            <div class="product-card" data-id="1" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="apple.png" alt="Apple"></div>
+                <div class="product-info">
+                    <h3>Red Fuji Apple</h3>
+                    <p>$5.99</p>
+                    <button class="add-btn eco-add-btn" data-id="1">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="2" data-type="dairy">
+                <div class="product-image"><img src="milk.png" alt="Milk"></div>
+                <div class="product-info">
+                    <h3>Whole Milk</h3>
+                    <p>$12.50</p>
+                    <button class="add-btn" data-id="2">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="3" data-type="pantry">
+                <div class="product-image"><img src="bread.png" alt="Bread"></div>
+                <div class="product-info">
+                    <h3>Whole Wheat Bread</h3>
+                    <p>$8.99</p>
+                    <button class="add-btn" data-id="3">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="4" data-type="dairy">
+                <div class="product-image"><img src="eggs.png" alt="Eggs"></div>
+                <div class="product-info">
+                    <h3>Farm Eggs</h3>
+                    <p>$15.00</p>
+                    <button class="add-btn" data-id="4">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="5" data-type="snack">
+                <div class="product-image"><img src="water.png" alt="Water"></div>
+                <div class="product-info">
+                    <h3>Mineral Water</h3>
+                    <p>$2.50</p>
+                    <button class="add-btn" data-id="5">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="6" data-type="pantry">
+                <div class="product-image"><img src="Beef.png" alt="Beef"></div>
+                <div class="product-info">
+                    <h3>Fresh Beef</h3>
+                    <p>$18.99</p>
+                    <button class="add-btn" data-id="6">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="7" data-type="snack">
+                <div class="product-image"><img src="BodyWash.png" alt="BodyWash"></div>
+                <div class="product-info">
+                    <h3>Body Wash</h3>
+                    <p>$7.99</p>
+                    <button class="add-btn" data-id="7">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="8" data-type="pantry">
+                <div class="product-image"><img src="ChickenLeg.png" alt="ChickenLeg"></div>
+                <div class="product-info">
+                    <h3>Chicken Legs</h3>
+                    <p>$9.99</p>
+                    <button class="add-btn" data-id="8">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="9" data-type="snack">
+                <div class="product-image"><img src="Chocolate.png" alt="Chocolate"></div>
+                <div class="product-info">
+                    <h3>Dark Chocolate</h3>
+                    <p>$4.99</p>
+                    <button class="add-btn" data-id="9">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="10" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="Cucumber.png" alt="Cucumber"></div>
+                <div class="product-info">
+                    <h3>Fresh Cucumber</h3>
+                    <p>$1.99</p>
+                    <button class="add-btn eco-add-btn" data-id="10">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="11" data-type="snack">
+                <div class="product-image"><img src="IceCream.png" alt="IceCream"></div>
+                <div class="product-info">
+                    <h3>Vanilla Ice Cream</h3>
+                    <p>$3.99</p>
+                    <button class="add-btn" data-id="11">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="12" data-type="snack">
+                <div class="product-image"><img src="Pen.png" alt="Pen"></div>
+                <div class="product-info">
+                    <h3>Ballpoint Pen</h3>
+                    <p>$2.49</p>
+                    <button class="add-btn" data-id="12">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="13" data-type="pantry">
+                <div class="product-image"><img src="Rice.png" alt="Rice"></div>
+                <div class="product-info">
+                    <h3>Long Grain Rice</h3>
+                    <p>$6.99</p>
+                    <button class="add-btn" data-id="13">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="14" data-type="snack">
+                <div class="product-image"><img src="Shampoo.png" alt="Shampoo"></div>
+                <div class="product-info">
+                    <h3>Shampoo</h3>
+                    <p>$8.49</p>
+                    <button class="add-btn" data-id="14">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="15" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="Avocado.png" alt="Avocado"></div>
+                <div class="product-info">
+                    <h3>Fresh Avocado</h3>
+                    <p>$3.49</p>
+                    <button class="add-btn eco-add-btn" data-id="15">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="16" data-type="dairy">
+                <div class="product-image"><img src="Salmon.png" alt="Salmon"></div>
+                <div class="product-info">
+                    <h3>Salmon Fillet</h3>
+                    <p>$22.99</p>
+                    <button class="add-btn" data-id="16">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="all-produce" class="products-section">
+    <div class="container">
+        <div class="cate-head">
+            <h2>Fresh Produce & Vegetables</h2>
+            <a href="#" class="cate-more">Browse All Fruits & Veg ></a>
+        </div>
+        <p class="eco-tip-text">🌱 Local seasonal produce, minimal plastic packaging</p>
+        <div class="products-grid">
+            <div class="product-card" data-id="17" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="apple.png" alt="Green Apple"></div>
+                <div class="product-info">
+                    <h3>Green Apple Pack</h3>
+                    <p>$6.49</p>
+                    <button class="add-btn eco-add-btn" data-id="17">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="18" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="banana.png" alt="Banana"></div>
+                <div class="product-info">
+                    <h3>Organic Banana Bunch</h3>
+                    <p>$2.99</p>
+                    <button class="add-btn eco-add-btn" data-id="18">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="19" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="tomato.png" alt="Tomato"></div>
+                <div class="product-info">
+                    <h3>Roma Tomato Box</h3>
+                    <p>$4.29</p>
+                    <button class="add-btn eco-add-btn" data-id="19">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="20" data-type="produce" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="lemon.png" alt="Lemon"></div>
+                <div class="product-info">
+                    <h3>Fresh Lemon Bag</h3>
+                    <p>$3.50</p>
+                    <button class="add-btn eco-add-btn" data-id="20">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        <div class="cate-head">
+            <h2>Meat & Seafood Counter</h2>
+            <a href="#" class="cate-more">See All Protein ></a>
+        </div>
+        <p class="eco-tip-text">🐟 Sustainably harvested seafood marked Eco Choice</p>
+        <div class="products-grid">
+            <div class="product-card" data-id="21" data-type="dairy" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="shrimp.png" alt="Shrimp"></div>
+                <div class="product-info">
+                    <h3>Frozen Shrimp Pack</h3>
+                    <p>$14.99</p>
+                    <button class="add-btn eco-add-btn" data-id="21">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="22" data-type="pantry">
+                <div class="product-image"><img src="porkchop.png" alt="Pork Chop"></div>
+                <div class="product-info">
+                    <h3>Premium Pork Chops</h3>
+                    <p>$12.49</p>
+                    <button class="add-btn" data-id="22">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="23" data-type="pantry" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="turkey.png" alt="Turkey"></div>
+                <div class="product-info">
+                    <h3>Ground Turkey</h3>
+                    <p>$10.99</p>
+                    <button class="add-btn eco-add-btn" data-id="23">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="24" data-type="dairy" data-eco="1">
+                <span class="eco-badge">Eco Choice</span>
+                <div class="product-image"><img src="cod.png" alt="Cod"></div>
+                <div class="product-info">
+                    <h3>Cod Fish Fillets</h3>
+                    <p>$19.99</p>
+                    <button class="add-btn eco-add-btn" data-id="24">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="cart" class="cart-section">
+    <div class="container">
+        <h2 class="section-title">Your Shopping Cart</h2>
+        <div class="cart-container">
+            <div class="cart-items" id="cart-items">
+                <p class="empty-cart">Your cart is empty.</p>
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total:</span>
+                    <span id="total" class="total-price">$0.00</span>
+                </div>
+                <div class="cart-buttons">
+                    <button class="btn-clear" id="clear-cart">Clear Cart</button>
+                    <button class="btn-checkout" id="checkout-btn">Checkout</button>
+                </div>
+                <div class="cart-eco-nudge" id="cartEcoTip"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 FreshMart - Amazon Style Grocery | Eco-Friendly Shopping Powered by AI Nudge</p>
+        <p style="margin-top:8px; font-size:14px;">
+            总访问量：<span id="busuanzi_value_site_pv"></span> 次 •
+            访客人数：<span id="busuanzi_value_site_uv"></span> 人
+        </p>
+    </div>
+</footer>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- 去掉type="module"，普通JS，不会有函数作用域冲突 -->
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    // 1. 重新排序：把 Eco 標籤商品排在前面
+    const grids = document.querySelectorAll('.products-grid');
+    grids.forEach(grid => {
+        const cards = Array.from(grid.querySelectorAll('.product-card'));
+        const ecoItems = cards.filter(card => card.dataset.eco === "1");
+        const normalItems = cards.filter(card => card.dataset.eco !== "1");
+        grid.innerHTML = "";
+        ecoItems.concat(normalItems).forEach(card => grid.appendChild(card));
+    });
+
+    // 2. 🤖 新增：讀取 localStorage 中的 AI Nudge 推薦資料並渲染
+    const rawAiData = localStorage.getItem('ai_recommendations');
+    if (rawAiData) {
+        try {
+            const recommendations = JSON.parse(rawAiData);
+            recommendations.forEach(rec => {
+                // 根據 item_id 尋找 DOM 中的商品卡片
+                const card = document.querySelector(`.product-card[data-id="${rec.item_id}"]`);
+                if (card) {
+                    // 加上外框高亮
+                    card.classList.add('ai-recommended-card');
+
+                    // 加上右上角的 AI 推薦徽章
+                    const aiBadge = document.createElement('span');
+                    aiBadge.className = 'ai-badge';
+                    aiBadge.innerText = `🤖 AI Choice #${rec.rank}`;
+                    card.appendChild(aiBadge);
+
+                    // 在按鈕上方插入 Nudge 文字提示框
+                    const productInfo = card.querySelector('.product-info');
+                    const nudgeBox = document.createElement('div');
+                    nudgeBox.className = 'ai-nudge-box';
+                    nudgeBox.innerHTML = `<strong>💡 AI Tip:</strong> ${rec.reason}`;
+
+                    const addBtn = productInfo.querySelector('.add-btn');
+                    productInfo.insertBefore(nudgeBox, addBtn);
+                }
+            });
+        } catch (e) {
+            console.error("Failed to parse AI recommendations from localStorage", e);
+        }
+    }
+
+    // 3. 購物車 Eco 提示邏輯
+    function updateEcoCartTip(){
+        const cartEcoTip = document.getElementById('cartEcoTip');
+        const ecoProductIds = [1,10,15,17,18,19,20,21,23,24];
+        let ecoCount = 0;
+        if (typeof cart !== 'undefined') {
+            cart.forEach(item => {
+                if(ecoProductIds.includes(item.id)) ecoCount += item.quantity;
+            });
+        }
+        if(ecoCount === 0){
+            cartEcoTip.innerText = "💡 AI Tip: Add Eco Choice produce to reduce your shopping carbon footprint";
+        } else {
+            const saveCarbon = (ecoCount * 0.4).toFixed(1);
+            cartEcoTip.innerText = `🌿 Great Choice! You selected ${ecoCount} eco-friendly items, saving ~${saveCarbon}kg CO₂ emissions`;
+        }
+    }
+
+    if (typeof updateCart === 'function') {
+        const originUpdateCart = updateCart;
+        updateCart = function(){
+            originUpdateCart();
+            updateEcoCartTip();
+        }
+    }
+});
+</script>
+</body>
+</html>
