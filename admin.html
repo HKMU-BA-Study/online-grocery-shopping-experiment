@@ -198,21 +198,55 @@
 </div>
 
 <script>
-    const PASSWORD = "123456";
+    async function login() {
+        const pwdInput = document.getElementById("pwd");
+        const loginBtn = document.querySelector("#loginPanel button");
+        const inputPassword = pwdInput.value.trim();
 
-    function login() {
-        let input = document.getElementById("pwd").value;
-        if (input === PASSWORD) {
-            document.getElementById("loginPanel").style.display = "none";
-            document.getElementById("adminPanel").style.display = "block";
-            loadStatistics();
-            loadOrderRecords();
-            loadAbandonCartLogs();
-            loadLogs();
-        } else {
-            alert("Wrong Password!");
+        if (!inputPassword) {
+            alert("Please enter password!");
+            return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.innerText = "Verifying...";
+
+        try {
+            const response = await fetch("/.netlify/functions/admin-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ password: inputPassword })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                document.getElementById("loginPanel").style.display = "none";
+                document.getElementById("adminPanel").style.display = "block";
+                loadStatistics();
+                loadOrderRecords();
+                loadAbandonCartLogs();
+                loadLogs();
+            } else {
+                alert(result.message || "Wrong Password!");
+                pwdInput.value = "";
+            }
+        } catch (error) {
+            console.error("Login verification error:", error);
+            alert("Verification service failed. Please try again later.");
+        } finally {
+            loginBtn.disabled = false;
+            loginBtn.innerText = "Login";
         }
     }
+
+    document.getElementById("pwd").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            login();
+        }
+    });
 
     function loadStatistics() {
         const clickCount = localStorage.getItem("siteClickCount") || 0;
